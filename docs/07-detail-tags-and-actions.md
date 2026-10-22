@@ -460,6 +460,112 @@ soft lighting, detailed background
 4. Не меняй одновременно лицо, причёску, позу и стиль.
 5. Если деталь всё равно не слушается, попробуй другой seed или контроль позы для сложного жеста.
 
+---
+
+## 13. Возрастное впечатление: сделать персонажа визуально взрослым
+
+Если персонаж выглядит слишком юным, одного negative prompt часто недостаточно. Лучше одновременно описать желаемый взрослый образ в positive и убрать нежелательные детские признаки в negative.
+
+### Positive: выбрать нужный возрастной образ
+
+| Что нужно | Positive-теги для теста | Примечание |
+|---|---|---|
+| Молодая взрослая женщина | `adult woman, young adult` | Взрослый персонаж с молодым лицом |
+| Более зрелый женский образ | `adult woman, mature female` | Начни с этой короткой комбинации |
+| Более зрелые черты лица | `mature face, defined jawline` | Может сделать лицо менее детским |
+| Более взрослые пропорции | `adult proportions, longer limbs` | Описательное уточнение, не гарантия |
+| Женщина средних лет | `middle-aged woman, mature face` | Более заметное возрастное впечатление |
+| Пожилая женщина | `elderly woman, wrinkles, gray hair` | Используй только если действительно нужно состарить персонажа |
+| Взрослый мужчина | `adult man, mature male` | Прямое указание на взрослого персонажа |
+| Более зрелые мужские черты | `mature face, defined jawline` | Растительность на лице добавляй отдельно, если нужна |
+
+**Базовый вариант для молодой взрослой женщины:**
+
+```text
+adult woman, young adult, mature female
+```
+
+Если лицо всё ещё выглядит детским, добавь один уточняющий тег:
+
+```text
+adult woman, mature female, mature face, defined jawline
+```
+
+Не добавляй `wrinkles`, `elderly` и `gray hair`, если хочешь лишь взрослую женщину, а не пожилую.
+
+### Negative: убрать детское впечатление
+
+Попробуй короткий блок:
+
+```text
+child, toddler, little girl, childlike face, childish features, chibi
+```
+
+- `child`, `toddler`, `little girl` — прямые указания на ребёнка; добавляй их в negative, если модель ошибочно делает персонажа ребёнком.
+- `childlike face`, `childish features` — описательные подсказки против детских черт лица.
+- `chibi` — карикатурно-маленькие пропорции; может давать детское впечатление, хотя это не синоним ребёнка.
+- Не добавляй `young` в negative автоматически, если нужен молодой взрослый персонаж: это может конфликтовать с желаемым образом.
+
+### Готовые блоки
+
+**Молодая взрослая женщина**
+
+Positive:
+```text
+adult woman, young adult, mature female
+```
+
+Negative:
+```text
+child, toddler, little girl, childlike face, childish features, chibi
+```
+
+**Более зрелое лицо и пропорции**
+
+Positive:
+```text
+adult woman, mature female, mature face, defined jawline, adult proportions
+```
+
+Negative:
+```text
+child, toddler, little girl, childlike face, childish features, chibi
+```
+
+**Женщина средних лет**
+
+Positive:
+```text
+middle-aged woman, mature face
+```
+
+Negative:
+```text
+child, toddler, little girl, chibi
+```
+
+**Взрослый мужчина**
+
+Positive:
+```text
+adult man, mature male, mature face
+```
+
+Negative:
+```text
+child, toddler, little boy, childlike face, childish features, chibi
+```
+
+### Если модель всё равно делает лицо слишком юным
+
+1. Зафиксируй seed и настройки Forge.
+2. Добавь только `adult woman, mature female` или `adult man, mature male`.
+3. Если этого мало, проверь `mature face` или `defined jawline` по одному.
+4. Проверь, не задают ли другие теги карикатурные или детские пропорции.
+5. Если лицо уже получилось, а нужно поправить только его возрастное впечатление, попробуй локальный inpainting.
+
+**Оговорка:** это практические кандидаты для тестирования, а не гарантированный возрастной фильтр. У разных персонажей и seed эффект может различаться.
+
 ## Источники и уверенность
 
 - [WAI Illustrious SDXL v1.7.0 — официальная карточка модели](https://huggingface.co/LyliaEngine/waiIllustriousSDXL_v170): рекомендует короткий quality-блок и предупреждает против чрезмерно длинных negative prompts.
