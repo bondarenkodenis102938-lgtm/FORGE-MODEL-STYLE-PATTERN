@@ -1,375 +1,796 @@
-# Positive and Negative Prompts by Body Part
-## Practical reference for WAI Illustrious SDXL v1.7.0 in Forge
+# Positive и Negative промпты для анатомии и стиля тела
+## Практический справочник для WAI Illustrious SDXL v1.7.0 в Stable Diffusion WebUI Forge
 
-This chapter is a practical prompt reference, not a list of guaranteed fixes. Tags are learned visual cues; their effect depends on the checkpoint, composition, pose, resolution, and other prompt terms. Start with the model-card baseline, then add only the group that addresses a visible problem.
+Этот справочник написан по-русски. Английские слова в блоках промптов оставлены на английском намеренно: WAI Illustrious — модель, обученная в том числе на тегах в стиле Danbooru, поэтому английские теги обычно удобнее для прямого тестирования.
 
-## 1. How to use this guide
+**Главное ограничение:** тег — это подсказка модели, а не команда с гарантированным результатом. Ни один список не гарантирует идеальные руки, ноги или лицо. Влияние тегов зависит от чекпойнта, композиции, позы, seed, разрешения и соседних тегов.
 
-- **Positive prompt** describes the feature you want to appear.
-- **Negative prompt** discourages a feature or defect you do not want.
-- Use positive anatomy tags when a feature is visible and important. Do not add detailed hands/feet tags to a tiny distant figure.
-- Add negative terms only for recurring defects. Do not paste every section into every image.
-- Change one group at a time, keep the seed and settings fixed, and compare results.
-- If a limb is hidden or outside the frame, the model may not draw it. Use composition tags such as `full body`, `upper body`, `close-up`, or `hands visible` when appropriate.
-- Negative prompts are not a substitute for inpainting, pose control, or a better source composition.
+## 1. Как читать этот гайд
 
-## 2. WAI baseline
+- **Positive prompt** — что хотим получить: форму, видимую деталь, позу, стиль рендеринга.
+- **Negative prompt** — что хотим ослабить: конкретную ошибку, например лишние пальцы или слипшиеся ноги.
+- **База модели** — короткий negative, опубликованный в карточке WAI.
+- **Практический тег** — идея для эксперимента; не обязательно официальный тег и не гарантированное исправление.
+- **Стиль** — внешний вид рисунка: линия, заливка, тени и уровень детализации.
+- **Анатомия** — форма и расположение частей тела. Хорошая анатомия и красивый стиль — разные задачи.
 
-The WAI Illustrious SDXL v1.7.0 model card lists this short negative baseline:
+Не вставляй все блоки сразу. Сначала определи, что конкретно не так на изображении, и добавь только соответствующую группу.
 
-```text
-bad quality, worst quality, worst detail, sketch, censor
-```
+## 2. Стартовая база для WAI Illustrious v1.7.0
 
-A simple quality positive block often used with this model is:
+Карточка модели показывает такой позитивный блок качества:
 
 ```text
 masterpiece, best quality, amazing quality
 ```
 
-These are model-specific starting points, not mandatory tokens. For anatomy problems, append a small targeted group rather than replacing the baseline with a huge negative list.
+И такой короткий negative:
 
-## 3. Head and face
+```text
+bad quality, worst quality, worst detail, sketch, censor
+```
 
-### Overall face
-**Positive options**
-```text
-detailed face, delicate facial features, balanced facial features, expressive face
-```
-**Negative options, only if needed**
-```text
-bad face, deformed face, distorted face, poorly drawn face, asymmetrical face
-```
-Notes: `detailed face` is broad; the more concrete tags below may be more useful for a specific issue.
+В карточке также указаны Euler a и CFG 5–7. Это стартовые рекомендации, а не обязательные настройки для каждой картинки.
 
-### Eyes
-**Positive options**
-```text
-detailed eyes, beautiful detailed eyes, expressive eyes, symmetrical eyes
-```
-**Negative options**
-```text
-bad eyes, asymmetrical eyes, cross-eyed, malformed eyes, extra eyes
-```
-Notes: `symmetrical eyes` may make expressions look less natural in some poses. Do not use it automatically if you want a dramatic or uneven expression.
+**Для первых тестов не раздувай промпт.** Начни с базы модели и добавляй один небольшой блок по конкретной проблеме. Слишком много отрицаний и повторяющихся тегов может изменить изображение не так, как ожидалось.
 
-### Pupils, iris and gaze
-**Positive options**
-```text
-detailed iris, visible pupils, looking at viewer, looking away, focused gaze
-```
-**Negative options**
-```text
-misaligned pupils, uneven pupils, blank eyes
-```
-Use only the gaze direction you want. Do not put contradictory gaze directions together.
+## 3. Общая схема: что добавить, если видишь проблему
 
-### Eyebrows
-**Positive options**
-```text
-detailed eyebrows, expressive eyebrows
-```
-**Negative options**
-```text
-uneven eyebrows, malformed eyebrows
-```
-Often unnecessary unless eyebrows are prominent in the shot.
+| Что не нравится | Сначала попробуй |
+|---|---|
+| В целом искажённое тело | `bad anatomy, bad proportions, deformed` |
+| Лишняя рука или нога | `extra limbs, extra arms, extra legs` |
+| Не хватает части тела | Проверь кадрирование и позу; попробуй `full body` или нужную позу |
+| Пальцы слились | `fused fingers, malformed fingers` |
+| Появились лишние пальцы | `extra fingers, too many fingers` |
+| Глаза смотрят в разные стороны | `cross-eyed, asymmetrical eyes` |
+| Стопы и пальцы ног искажены | `bad feet, deformed feet, malformed toes` |
+| Тело выглядит слишком реалистично | Попробуй выбранный anime/style-блок, а не десятки анатомических отрицаний |
+| Тело выглядит слишком плоско | Попробуй `soft shading`, `gradient shading` или `ambient occlusion` — по одному |
+| Контур слишком толстый | Убери `thick outlines`, попробуй `delicate lineart` или `thin lineart` |
 
-### Nose
-**Positive options**
+Negative не может надёжно дорисовать скрытую руку или ногу. Для устойчивых ошибок используй inpainting, позный контроль или более ясную композицию.
+
+---
+
+# Часть I. Анатомия по зонам
+
+## 4. Лицо в целом
+
+**Что описывают эти теги:** общую ясность черт лица. Они не задают конкретную форму глаз, носа или рта.
+
+Positive — варианты для теста:
+
 ```text
-small nose, delicate nose, defined nose
+detailed face, delicate facial features, expressive face
 ```
-**Negative options**
+
+Negative — только если видишь такие ошибки:
+
+```text
+bad face, deformed face, distorted face
+```
+
+- `detailed face` — просит больше заметных деталей лица.
+- `delicate facial features` — подталкивает к более тонким и мягким чертам; результат зависит от модели.
+- `expressive face` — акцент на выразительности.
+- `distorted face` — попытка ослабить искажение, но не точная команда на исправление.
+
+Не добавляй `symmetrical face` автоматически: идеальная симметрия может сделать выражение менее естественным.
+
+## 5. Глаза, зрачки и взгляд
+
+Базовый positive:
+
+```text
+detailed eyes, expressive eyes
+```
+
+Если нужен взгляд прямо на зрителя, добавь:
+
+```text
+looking at viewer
+```
+
+Если взгляд должен быть направлен в сторону, используй вместо этого:
+
+```text
+looking away
+```
+
+Negative при конкретных ошибках:
+
+```text
+bad eyes, asymmetrical eyes, cross-eyed, malformed eyes
+```
+
+Дополнительные тесты:
+
+- `detailed iris` — акцент на рисунке радужки.
+- `visible pupils` — если зрачки теряются.
+- `half-closed eyes` — для полуприкрытых век.
+- `closed eyes` — если глаза должны быть закрыты.
+
+Не смешивай противоположные состояния, например `closed eyes` и `looking at viewer`, если это не осознанный эксперимент. Тег `symmetrical eyes` может уменьшить различия между глазами, но иногда делает лицо менее живым.
+
+## 6. Брови, нос, рот и уши
+
+### Брови
+
+Positive:
+
+```text
+expressive eyebrows, detailed eyebrows
+```
+
+Negative:
+
+```text
+malformed eyebrows, uneven eyebrows
+```
+
+Эти теги необязательны: если брови почти не видны, их влияние будет небольшим.
+
+### Нос
+
+Positive:
+
+```text
+delicate nose, defined nose
+```
+
+Negative:
+
 ```text
 distorted nose, malformed nose
 ```
-In anime art, the nose may intentionally be minimal. `defined nose` can push the image toward more realistic rendering.
 
-### Mouth, lips and teeth
-**Positive options**
+В аниме нос часто нарисован минимально. `defined nose` может сделать его заметнее и приблизить лицо к более реалистичной подаче.
+
+### Рот и зубы
+
+Positive — выбери нужное состояние:
+
 ```text
-detailed mouth, natural smile, closed mouth, parted lips
+natural smile
 ```
-**Negative options**
+
+```text
+closed mouth
+```
+
+```text
+parted lips
+```
+
+Negative:
+
 ```text
 bad mouth, distorted mouth, malformed teeth, extra teeth
 ```
-Pick the intended mouth state. Avoid adding `smile`, `open mouth`, and `closed mouth` together unless you are testing alternatives.
 
-### Ears
-**Positive options**
+Не добавляй одновременно противоречащие состояния рта. `parted lips` — слегка разомкнутые губы; это не обязательно широкая улыбка или открытый рот.
+
+### Уши
+
+Positive:
+
 ```text
-detailed ears, visible ears
+visible ears, detailed ears
 ```
-**Negative options**
+
+Negative:
+
 ```text
 bad ears, malformed ears, extra ears
 ```
-Use `visible ears` only when hair or framing should not cover them.
 
-### Hairline, hairstyle and hair strands
-**Positive options**
-```text
-detailed hair, detailed hair strands, layered hair, flowing hair, hair highlights
-```
-**Negative options**
-```text
-messy hair, tangled hair, poorly drawn hair
-```
-These negatives are style-dependent: do not use `messy hair` if you want a windswept or deliberately messy hairstyle.
+`visible ears` используй, если уши должны быть видны из-под волос. Если они закрыты причёской, это не ошибка.
 
-## 4. Neck, shoulders and torso
+## 7. Волосы и линия роста волос
 
-### Neck
-**Positive options**
-```text
-natural neck, slender neck
-```
-**Negative options**
-```text
-long neck, deformed neck, twisted neck
-```
-`slender neck` is a body-design choice, not a universal anatomy fix.
+Positive для деталей:
 
-### Shoulders and collarbones
-**Positive options**
 ```text
-natural shoulders, defined collarbones, relaxed shoulders
-```
-**Negative options**
-```text
-uneven shoulders, deformed shoulders, malformed collarbones
-```
-Asymmetry can be correct in a turned or leaning pose; inspect the pose before adding a negative.
-
-### Chest and ribcage
-**Positive options**
-```text
-natural torso, balanced proportions, defined torso
-```
-**Negative options**
-```text
-bad anatomy, deformed torso, unnatural proportions, twisted torso
-```
-Choose shape-related descriptors only when you deliberately want a particular body type. Avoid stacking contradictory body-shape tags.
-
-### Waist, abdomen and back
-**Positive options**
-```text
-natural waist, defined waist, natural abdomen, natural back
-```
-**Negative options**
-```text
-deformed torso, twisted torso, unnatural waist, broken back
-```
-`defined waist` changes the design; it does not simply improve anatomy.
-
-## 5. Arms, elbows, wrists and hands
-
-### Arms
-**Positive options**
-```text
-natural arms, well-defined arms, arms in natural position
-```
-**Negative options**
-```text
-bad arms, deformed arms, extra arms, missing arms, disconnected limbs, extra limbs
-```
-If the pose is complex, describe the action plainly: `arms crossed`, `one arm raised`, or `hands behind back`.
-
-### Elbows and forearms
-**Positive options**
-```text
-natural arm proportions, natural elbow position
-```
-**Negative options**
-```text
-deformed arms, twisted arms, unnatural arm proportions
-```
-These are broad terms and may have limited effect; use pose control or inpainting for stubborn errors.
-
-### Wrists
-**Positive options**
-```text
-natural wrists, slender wrists
-```
-**Negative options**
-```text
-deformed wrists, twisted wrists, broken wrists
+detailed hair, detailed hair strands, hair highlights
 ```
 
-### Hands — general
-**Positive options**
-```text
-detailed hands, well-drawn hands, natural hands
-```
-**Negative options**
-```text
-bad hands, poorly drawn hands, deformed hands, mutated hands
-```
-Use the positive tags when hands are visible and large enough to matter. They do not guarantee perfect anatomy.
+Для движения:
 
-### Fingers and thumbs
-**Positive options**
 ```text
-five fingers, separated fingers, natural fingers, visible thumb
-```
-**Negative options**
-```text
-extra fingers, missing fingers, fused fingers, malformed fingers, extra digit, fewer digits, too many fingers
-```
-`five fingers` can help describe the intended anatomy but is not a guarantee. For a hand holding an object, also describe the grip and object clearly.
-
-### Hand pose and contact
-**Positive options**
-```text
-open hand, relaxed hands, hand on hip, holding object, hands clasped
-```
-**Negative options**
-```text
-floating hands, disconnected hands, fused hands, malformed hands
-```
-Use the actual pose you want. If the hand must hold a specific item, name the item and the interaction, e.g. `right hand holding a cup`.
-
-## 6. Pelvis, hips and legs
-
-### Pelvis and hips
-**Positive options**
-```text
-natural hips, balanced proportions, natural pelvis
-```
-**Negative options**
-```text
-deformed hips, unnatural proportions, twisted pelvis
+flowing hair
 ```
 
-### Thighs and knees
-**Positive options**
-```text
-natural leg proportions, natural knees, defined thighs
-```
-**Negative options**
-```text
-deformed thighs, fused thighs, extra thighs, malformed knees, twisted legs
-```
-Do not use `defined thighs` unless that shape is part of the desired design.
+Для слоистой причёски:
 
-### Lower legs, ankles and legs overall
-**Positive options**
 ```text
-natural legs, well-defined legs, balanced leg proportions
+layered hair
 ```
-**Negative options**
-```text
-bad legs, deformed legs, extra legs, missing legs, fused legs, disconnected limbs
-```
-For a full-body image, explicitly describe the pose and framing. Negative tags cannot reliably reconstruct a leg hidden behind another leg.
 
-### Feet and toes
-**Positive options**
+Negative — только если волосы выглядят неправильно:
+
+```text
+poorly drawn hair, tangled hair
+```
+
+Не используй `messy hair` как универсальный negative: это может противоречить желаемой растрёпанной или ветром развеваемой причёске.
+
+## 8. Шея, плечи и ключицы
+
+Positive:
+
+```text
+natural neck, natural shoulders
+```
+
+Для тонкой шеи как художественного решения:
+
+```text
+slender neck
+```
+
+Для видимых ключиц:
+
+```text
+defined collarbones
+```
+
+Negative:
+
+```text
+deformed neck, twisted neck, deformed shoulders
+```
+
+- `slender neck` меняет дизайн персонажа; это не универсальное исправление.
+- `defined collarbones` добавляет акцент на ключицах и может быть нежелателен для мягкого, упрощённого стиля.
+- Разная высота плеч может быть правильной, если персонаж наклонён или повернут.
+
+## 9. Туловище, грудная клетка, талия и спина
+
+Базовый positive:
+
+```text
+natural torso, balanced proportions
+```
+
+Для более заметного силуэта:
+
+```text
+defined waist
+```
+
+Negative при искажениях:
+
+```text
+bad anatomy, deformed torso, twisted torso, bad proportions
+```
+
+`defined waist` — эстетический выбор, а не просто повышение анатомической точности. Не складывай одновременно несовместимые описания пропорций. Если спина выглядит странно из-за сложной позы, попробуй сначала упростить позу.
+
+## 10. Руки, локти и предплечья
+
+Positive:
+
+```text
+natural arms, natural arm proportions
+```
+
+Если руки должны быть заметны в кадре, уточни действие:
+
+```text
+arms crossed
+```
+
+или
+
+```text
+one arm raised
+```
+
+Negative при конкретных дефектах:
+
+```text
+bad arms, deformed arms, twisted arms, extra arms, disconnected limbs
+```
+
+- `extra arms` имеет смысл, если действительно появилась лишняя рука.
+- `twisted arms` — экспериментальный тег, а не надёжная анатомическая команда.
+- Чёткое описание позы часто полезнее длинного списка отрицаний.
+
+## 11. Кисти и пальцы рук
+
+### Общая форма кисти
+
+Positive:
+
+```text
+detailed hands, natural hands
+```
+
+Negative:
+
+```text
+bad hands, deformed hands, mutated hands
+```
+
+### Количество и разделение пальцев
+
+Positive для теста:
+
+```text
+five fingers, separated fingers, visible thumb
+```
+
+Negative:
+
+```text
+extra fingers, missing fingers, fused fingers, malformed fingers
+```
+
+Это подсказки, а не гарантия правильного количества пальцев. Если кисть маленькая в кадре, модель может не прорисовать каждый палец независимо от промпта.
+
+### Положение рук
+
+Выбирай подходящий тег действия:
+
+```text
+open hand
+```
+
+```text
+relaxed hands
+```
+
+```text
+hands clasped
+```
+
+```text
+hand on hip
+```
+
+Negative при видимых ошибках:
+
+```text
+floating hands, disconnected hands, fused hands
+```
+
+Если рука держит предмет, назови предмет и действие: например, `right hand holding a cup`. Не перегружай запрос десятком разных поз кисти.
+
+## 12. Таз, бёдра, колени и ноги
+
+### Таз и бёдра
+
+Positive:
+
+```text
+natural hips, balanced proportions
+```
+
+Negative:
+
+```text
+deformed hips, twisted pelvis, unnatural proportions
+```
+
+### Ноги в целом
+
+Positive:
+
+```text
+natural legs, natural leg proportions
+```
+
+Negative:
+
+```text
+bad legs, deformed legs, extra legs, fused legs, twisted legs
+```
+
+### Колени и голени
+
+Positive для теста:
+
+```text
+natural knees, natural leg proportions
+```
+
+Negative:
+
+```text
+malformed knees, deformed legs
+```
+
+Теги `defined thighs` или `slender legs` меняют внешний вид тела. Не считай их универсальными тегами исправления.
+
+Если одна нога находится позади другой, опиши положение словами, например `one leg forward, one leg behind`. Отрицание `fused legs` не всегда решит проблему сложного перекрытия.
+
+## 13. Стопы, пальцы ног и обувь
+
+Если босые стопы видны крупно:
+
 ```text
 detailed feet, natural feet, visible toes
 ```
-**Negative options**
-```text
-bad feet, poorly drawn feet, deformed feet, extra toes, missing toes, fused toes, malformed feet
-```
-If shoes are meant to cover the feet, describe the shoes instead of asking for detailed toes.
 
-## 7. Overall anatomy, proportions and pose
+Negative при ошибках:
 
-**Positive options**
 ```text
-good anatomy, balanced proportions, natural pose, anatomically plausible pose
+bad feet, deformed feet, malformed toes, extra toes, fused toes
 ```
 
-**Negative options**
+Если персонаж в обуви, описывай обувь, а не пальцы ног. Для маленьких стоп на дальнем плане подробные теги могут почти не влиять на результат.
+
+## 14. Общие теги анатомии
+
+Positive — пробуй по одному:
+
 ```text
-bad anatomy, bad proportions, deformed, disfigured, mutated, extra limbs, missing limbs, disconnected limbs, floating limbs
+good anatomy, balanced proportions, natural pose
 ```
 
-These broad negatives are useful as a troubleshooting group, but are not all required at once. Terms such as `good anatomy` and `natural pose` are broad cues, not technical constraints.
+Negative — короткий блок для заметной общей проблемы:
 
-### Body count and duplicated parts
-**Negative options**
 ```text
-duplicate, cloned body, extra head, extra arms, extra legs, extra hands, extra fingers, extra eyes
+bad anatomy, bad proportions, deformed, extra limbs, disconnected limbs
 ```
-Use only if duplicate parts actually appear. For multiple people, do not add a blanket negative that conflicts with the intended number of subjects.
 
-## 8. Universal copy-and-paste blocks
+Не гарантируется, что `good anatomy` улучшит любую картинку: это широкое описание. Если дефект только на одной кисти, начни с блока для кистей, а не добавляй все анатомические отрицания.
 
-### A. Short WAI baseline
+---
+
+# Часть II. Художественные стили для разных частей тела
+
+## 15. Сначала важное о стиле
+
+Теги ниже управляют преимущественно **подачей рисунка**, а не правильностью анатомии. Они могут менять не только одну руку или одну ногу, но и всю картинку.
+
+Например, `soft shading` может смягчить тени на теле в целом. Если написать в одном промпте `cel shading` для рук и `painterly rendering` для ног, модель может не разделить стили по частям так чётко, как задумано. Для согласованного результата проще выбрать один общий стиль, а локальные особенности задавать описанием детали.
+
+### Стиль A — чистое аниме с тонкими линиями
+
+```text
+clean lineart, thin lineart, cel shading, smooth colors
+```
+
+Что ожидать: контуры заметны, формы читаются быстро, тени обычно выглядят более графичными и разделёнными. Подходит для аккуратных персонажей, чистого силуэта, ясного разделения пальцев и складок одежды.
+
+Возможный минус: переходы света могут быть резкими, а объём — менее живописным.
+
+### Стиль B — мягкая полуживописная иллюстрация
+
+```text
+delicate lineart, soft shading, gradient shading, subtle brush texture
+```
+
+Что ожидать: мягкие тени и плавные цветовые переходы, контур не должен перетягивать всё внимание. Хороший старт, если хочется аккуратную аниме-картинку с мягким объёмом.
+
+Возможный минус: при слишком мягкой подаче пальцы и суставы могут стать менее чёткими.
+
+### Стиль C — живописная подача
+
+```text
+painterly rendering, soft brushwork, subtle texture, rich midtones
+```
+
+Что ожидать: ощущение мазков и более живописного света, менее механически ровные поверхности.
+
+Возможный минус: чёткость мелких анатомических деталей может снизиться. Не добавляй много слов про текстуру, если хочешь гладкую кожу.
+
+### Стиль D — объёмное мягкое освещение
+
+```text
+soft lighting, soft cast shadows, ambient occlusion, smooth shading
+```
+
+Что ожидать: более ясное ощущение объёма за счёт теней и мягкого света.
+
+Возможный минус: `ambient occlusion` иногда делает контактные тени слишком сильными. Проверяй его отдельно.
+
+**Для твоего желаемого направления начни с B**, затем отдельно сравни B + `warm lighting` и B + `subtle brush texture`. Не добавляй все варианты сразу.
+
+## 16. Стили рук и кистей
+
+### Вариант 1 — чистая, аккуратная кисть
+
+```text
+detailed hands, clean lineart, thin lineart, cel shading, separated fingers
+```
+
+Подходит, когда хочется ясного контура кисти и хорошо разделённых пальцев. `separated fingers` описывает визуальное разделение, но не гарантирует правильную анатомию.
+
+### Вариант 2 — мягкие изящные руки
+
+```text
+delicate hands, delicate lineart, soft shading, gradient shading
+```
+
+Подходит для мягкой, полуживописной иллюстрации. Слово `delicate` может влиять на тонкость и общее впечатление от формы; это эстетическая подсказка, а не медицинское описание анатомии.
+
+### Вариант 3 — более выразительные и детализированные кисти
+
+```text
+detailed hands, defined fingers, subtle shadows, ambient occlusion
+```
+
+Подходит, если кисть крупная в кадре и должна быть визуально понятной. Если тени между пальцами становятся слишком тёмными, убери `ambient occlusion`.
+
+### Вариант 4 — гладкая стилизованная аниме-кисть
+
+```text
+anime style, smooth shading, clean lineart, simplified details
+```
+
+Подходит для упрощённой графики. Это скорее стиль, чем способ исправления ошибок. Если пальцы теряются, верни `detailed hands` и проверь результат.
+
+## 17. Стили рук, предплечий и плеч
+
+### Тонкие и изящные руки
+
+```text
+slender arms, delicate lineart, soft shading, smooth skin shading
+```
+
+Что меняет: общий силуэт рук стремится выглядеть тоньше и мягче. Используй только если это соответствует дизайну персонажа.
+
+### Более чёткие формы и объём
+
+```text
+defined arms, clean lineart, cel shading, clear cast shadows
+```
+
+Что меняет: форма руки становится более графичной, переходы света могут быть резче.
+
+### Мягкая полуживописная анатомия
+
+```text
+natural arm proportions, soft shading, gradient shading, subtle brush texture
+```
+
+Что меняет: меньше жёстких границ в тенях, мягче объём.
+
+Negative для проблем с руками — не добавляй все варианты автоматически:
+
+```text
+bad arms, deformed arms, extra arms, bad hands, extra fingers, fused fingers
+```
+
+Если испорчена только кисть, начни с `bad hands, extra fingers, fused fingers`; если проблема выше локтя, тестируй `bad arms, deformed arms`.
+
+## 18. Стили ног и коленей
+
+### Длинный, тонкий силуэт
+
+```text
+long legs, slender legs, clean lineart, soft shading
+```
+
+Это эстетический выбор: модель может изменить пропорции ног. Используй, если именно такой силуэт нужен.
+
+### Чёткая аниме-форма
+
+```text
+natural leg proportions, clean lineart, cel shading, defined shadows
+```
+
+Подходит для более графичного стиля, где форма коленей и ног читается через линии и тени.
+
+### Мягкие полуживописные ноги
+
+```text
+natural leg proportions, gradient shading, soft cast shadows, smooth shading
+```
+
+Подходит для плавных переходов и мягкого объёма.
+
+### Более спортивная форма
+
+```text
+athletic legs, defined muscles, natural leg proportions, directional lighting
+```
+
+Используй, только если хочешь выраженную мускулатуру. Эти слова меняют дизайн тела и не являются универсальным улучшением.
+
+Negative при реальных ошибках:
+
+```text
+bad legs, deformed legs, fused legs, extra legs, malformed knees
+```
+
+## 19. Стили стоп
+
+### Простые стилизованные стопы
+
+```text
+anime style, clean lineart, smooth shading, simplified details
+```
+
+Подходит, если стопы маленькие в кадре и не должны выглядеть фотореалистично.
+
+### Более детализированные босые стопы
+
+```text
+detailed feet, natural feet, soft shading, subtle shadows
+```
+
+Подходит для крупного плана босых стоп. Теги не гарантируют правильное количество пальцев.
+
+### Чёткая графическая стопа
+
+```text
+detailed feet, clean lineart, cel shading, defined contours
+```
+
+Подходит для рисунка с выраженным контуром.
+
+Negative при ошибках:
+
+```text
+bad feet, deformed feet, malformed toes, extra toes, fused toes
+```
+
+Если стопы скрыты обувью, лучше описать обувь и её форму. Не проси одновременно видимые пальцы ног и закрытые ботинки.
+
+## 20. Стили туловища и кожи
+
+### Мягкая гладкая кожа
+
+```text
+smooth skin shading, soft shading, gradient shading, soft lighting
+```
+
+Ожидаемый результат: плавные тени и меньше резких переходов.
+
+### Чистая графическая анатомия
+
+```text
+clean lineart, cel shading, defined contours, clear shadows
+```
+
+Ожидаемый результат: более чёткая форма, графическое разделение света и тени.
+
+### Живописный объём
+
+```text
+painterly rendering, soft brushwork, rich midtones, subtle texture
+```
+
+Ожидаемый результат: мягкий живописный рендер и более заметная фактура.
+
+### Более реалистичные объёмные формы
+
+```text
+natural body proportions, soft cast shadows, ambient occlusion, directional lighting
+```
+
+Это может приблизить освещение и формы к более объёмной подаче, но не гарантирует фотореализм. Если результат стал слишком тёмным, убери `ambient occlusion` или `directional lighting` и сравни.
+
+## 21. Можно ли каждой конечности назначить отдельный стиль?
+
+Можно попробовать, но результат не всегда предсказуем. Модель может применить стиль ко всему персонажу вместо выбранной конечности.
+
+Пример единого стиля с разной степенью детализации:
+
+```text
+semi-painterly anime illustration, delicate lineart, soft shading, gradient shading,
+detailed hands, detailed fingers, natural arm proportions, natural leg proportions,
+detailed feet, subtle brush texture
+```
+
+Здесь общий стиль единый, а руки и стопы получают отдельные подсказки на детализацию.
+
+Если нужна действительно другая прорисовка только одной кисти или стопы, надёжнее:
+1. Сгенерировать картинку в одном стиле.
+2. Использовать inpainting на конкретной области.
+3. Менять только теги выбранной области и сохранять остальной промпт.
+4. Проверить, не выбивается ли отредактированная часть из общего стиля.
+
+Не пытайся одновременно получить `cel shading` и `painterly rendering` на одной и той же области, если не хочешь смешанный результат.
+
+---
+
+# Часть III. Готовые блоки для копирования
+
+## 22. Базовый WAI + мягкий аниме-стиль
+
 Positive:
+
 ```text
-masterpiece, best quality, amazing quality
+masterpiece, best quality, amazing quality, 1girl, solo,
+semi-painterly anime illustration, delicate lineart, soft shading,
+gradient shading, soft lighting, detailed eyes, detailed hair
 ```
+
 Negative:
+
 ```text
 bad quality, worst quality, worst detail, sketch, censor
 ```
 
-### B. General character — optional anatomy cleanup
-Append to the WAI negative baseline only if anatomy errors occur:
+Это стартовый шаблон. Добавь внешность, одежду, позу и фон отдельно.
+
+## 23. База + руки и пальцы
+
+Добавь в positive, если кисти хорошо видны:
+
 ```text
-bad anatomy, bad proportions, deformed, extra limbs, missing limbs, disconnected limbs
+detailed hands, natural hands, separated fingers
 ```
 
-### C. Hands-only cleanup
+Добавь в negative, только если есть соответствующие ошибки:
+
 ```text
-bad hands, deformed hands, mutated hands, extra fingers, missing fingers, fused fingers, malformed fingers
+bad hands, deformed hands, extra fingers, fused fingers, malformed fingers
 ```
 
-### D. Face-only cleanup
+## 24. База + ноги и стопы
+
+Positive:
+
 ```text
-bad face, deformed face, distorted face, asymmetrical eyes, cross-eyed, malformed mouth
+natural leg proportions, natural pose
 ```
 
-### E. Legs and feet cleanup
+Если стопы босые и крупно видны:
+
 ```text
-bad legs, deformed legs, fused legs, extra legs, bad feet, deformed feet, extra toes, fused toes
+detailed feet, natural feet
 ```
 
-Do not automatically combine B, C, D, and E. Start with the group that matches the observed defect.
+Negative при проблемах:
 
-## 9. A practical troubleshooting table
+```text
+bad legs, deformed legs, fused legs, bad feet, deformed feet, malformed toes
+```
 
-| Visible problem | First test in negative prompt | Positive or composition cue to test |
-|---|---|---|
-| Too many fingers | `extra fingers, too many fingers` | `five fingers, separated fingers` |
-| Fingers merged together | `fused fingers, malformed fingers` | `separated fingers, detailed hands` |
-| Hands look distorted | `bad hands, deformed hands` | Describe the hand pose simply |
-| Eyes misaligned | `asymmetrical eyes, cross-eyed` | `detailed eyes` |
-| Face distorted | `bad face, distorted face` | `detailed face` |
-| Extra limbs | `extra limbs, extra arms, extra legs` | State the pose and number of people clearly |
-| Legs merged | `fused legs, deformed legs` | Describe which leg is forward/behind |
-| Feet malformed | `bad feet, malformed feet` | `detailed feet` if bare feet are visible |
-| Neck too long | `long neck` | Avoid contradictory body proportions |
-| Body cropped unintentionally | Test `cropped, out of frame` cautiously | `full body, feet visible` and allow enough canvas space |
+## 25. База + общая анатомия
 
-The prompt cannot always fix composition by itself. If the defect persists, use inpainting for the affected region, a pose guide, or regenerate with a clearer composition.
+Negative:
 
-## 10. Safe testing procedure in Forge
+```text
+bad anatomy, bad proportions, deformed, extra limbs, disconnected limbs
+```
 
-1. Keep checkpoint, sampler, steps, CFG, image size, and seed fixed.
-2. Generate a baseline without the targeted anatomy terms.
-3. Add only one small negative group.
-4. Compare the same seed and inspect the same body part.
-5. If it improves, keep the group; if the image gets worse, remove it.
-6. For hands, face, or feet occupying a small part of the image, consider inpainting rather than adding dozens of tags.
+Не добавляй этот блок, если тело уже выглядит хорошо. Не существует обязательного списка, который нужен каждой генерации.
 
-## 11. Important caveats
+---
 
-- There is no single official universal positive/negative list for every body part.
-- The WAI model card provides a short quality-oriented negative baseline; the anatomy groups here are practical suggestions compiled from common prompting practice.
-- Tags can have side effects. For example, `bad hands` may influence the overall hand rendering, while `cropped` can affect framing.
-- Do not put desired traits in the negative prompt. If you want anime art, do not negate `anime`; if you want visible bare feet, do not negate `feet`.
-- Negative prompts cannot guarantee correct anatomy. Inpainting, pose conditioning, and clear framing can be more effective for persistent errors.
+# Часть IV. Как проверить теги в Forge
 
-## Sources
+## 26. Простой эксперимент без путаницы
 
-- WAI Illustrious SDXL v1.7.0 model card: https://huggingface.co/LyliaEngine/waiIllustriousSDXL_v170
-- Illustrious / NoobAI / Pony prompting reference: https://github.com/tsuseki/vrfu-ai/blob/main/docs/prompting.md
-- InvokeAI prompting guide: https://invoke.ai/concepts/prompting-guide/
-- SD.Next prompting documentation: https://vladmandic.github.io/sdnext-docs/Prompting/
+1. Выбери один сюжет, один checkpoint и один seed.
+2. Оставь одинаковыми sampler, steps, CFG и разрешение.
+3. Сгенерируй картинку с коротким промптом.
+4. Добавь только один блок, например `detailed hands, separated fingers`.
+5. Сравни именно руки, а не только общее впечатление.
+6. Запиши, стало ли лучше, хуже или ничего не изменилось.
+7. Удали теги, которые не помогают.
+
+Не меняй одновременно стиль, анатомию, освещение и композицию: иначе будет трудно понять, какой тег повлиял на результат.
+
+## 27. Шаблон записи эксперимента
+
+| Поле | Что записать |
+|---|---|
+| Модель | WAI Illustrious SDXL v1.7.0 |
+| Seed | Одно и то же значение в сравнении |
+| Проблема | Например, пальцы сливаются |
+| Добавленный тег | Например, `separated fingers` |
+| Negative | Например, `fused fingers` |
+| Результат | Лучше / хуже / без заметной разницы |
+| Решение | Оставить / удалить / проверить отдельно |
+
+## 28. Что официально подтверждено, а что нет
+
+- **Подтверждено карточкой WAI:** короткий quality-блок, короткий negative-блок, рекомендуемые sampler и диапазон CFG.
+- **Практические варианты:** большинство тегов для анатомии и стиля в этом документе. Это подсказки для экспериментов, а не официальные гарантии автора модели.
+- **Не гарантируется:** исправление любой ошибки одним тегом, одинаковое действие во всех позах и независимое применение стиля только к одной конечности.
+
+## Источники
+
+1. Карточка модели WAI Illustrious SDXL v1.7.0: https://huggingface.co/LyliaEngine/waiIllustriousSDXL_v170
+2. Руководство по промптам для Illustrious / NoobAI / Pony: https://github.com/tsuseki/vrfu-ai/blob/main/docs/prompting.md
+3. MonAI — WAI Illustrious v17.0: https://wiki.monai.art/en/models/wai_illustrious_17
+
+Для тегов, которых нет в карточке модели, проверяй эффект на своём seed. Не считай популярность тега доказательством, что он обязательно поможет именно твоему checkpoint.
