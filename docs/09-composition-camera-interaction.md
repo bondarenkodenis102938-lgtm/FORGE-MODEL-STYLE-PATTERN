@@ -912,7 +912,8 @@ natural wrist alignment, consistent lighting
 1. [Forge Couple — официальный README](https://github.com/Haoming02/sd-forge-couple) — Basic/Advanced/Mask, направления плиток, разделитель строк, Global Effect, ограничения и предупреждения.
 2. [Forge Couple — CHANGELOG](https://github.com/Haoming02/sd-forge-couple/blob/main/CHANGELOG.md) — история изменений, включая ветку v7.x.
 3. [ControlNet — официальный репозиторий](https://github.com/lllyasviel/ControlNet) — концепция управления генерацией дополнительными условиями, примеры позы и глубины.
-4. [ControlNet OpenPose на Hugging Face](https://huggingface.co/lllyasviel/sd-controlnet-openpose) — пример модели, обусловленной позой человека.
+4. [ControlNet OpenPose для SDXL на Hugging Face](https://huggingface.co/xinsir/controlnet-openpose-sdxl-1.0) — модель позового контроля для семейства SDXL.
+   Не путай её с [lllyasviel/sd-controlnet-openpose](https://huggingface.co/lllyasviel/sd-controlnet-openpose): в карточке этой модели указан Stable Diffusion 1.5, поэтому это не тот же вариант для WAI Illustrious SDXL.
 5. [WAI Illustrious SDXL v1.7.0 — карточка модели](https://huggingface.co/LyliaEngine/waiIllustriousSDXL_v170) — ориентир для параметров именно используемого чекпойнта.
 
 ### Как понимать этот справочник
