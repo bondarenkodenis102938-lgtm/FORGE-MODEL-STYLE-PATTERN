@@ -13,6 +13,7 @@
 3. [Свет, цвет и фон](docs/03-light-color-background.md) — освещение, палитры, окружение, композиция.
 4. [Промпты и настройки Forge](docs/04-forge-workflow.md) — шаблоны, негативный промпт, sampler, CFG, seed.
 5. [Лаборатория сравнений](docs/05-experiments.md) — как проверять теги по одному и записывать результаты.
+6. [Positive и negative промпты по частям тела](docs/06-body-prompts.md) — лицо, глаза, волосы, туловище, руки, пальцы, ноги, стопы и типовые анатомические ошибки.
 
 ## Быстрый старт
 
@@ -54,7 +55,7 @@ bad quality, worst quality, worst detail, sketch, censor
 - [WAI-illustrious-SDXL v17.0 — MonAI model guide](https://wiki.monai.art/en/models/wai_illustrious_17)
 - [Prompting Guide: Illustrious / NoobAI / Pony SDXL fine-tunes](https://github.com/tsuseki/vrfu-ai/blob/main/docs/prompting.md)
 - [Illustrious XL — MonAI](https://wiki.monai.art/en/models/illustrious_xl)
-- [WAI Illustrious SDXL v1.7 model file on Hugging Face](https://huggingface.co/yufusoft/WAI-illustrious-SDXL/blob/main/waiIllustriousSDXL_v170.safetensors)
+- [WAI Illustrious SDXL v1.7 model file on Hugging Face](https://huggingface.co/yufusoft/waiIllustriousSDXL_v170)
 
 Официальные страницы модели важнее общих советов для других чекпойнтов. Советы для Pony, SD 1.5, Flux или NoobAI нельзя автоматически переносить на WAI Illustrious.
 
